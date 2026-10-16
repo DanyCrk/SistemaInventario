@@ -1,0 +1,15 @@
+.app-container {
+  min-height: 100vh;
+}
+
+.main-container {
+  margin-left: 240px;
+  min-height: 100vh;
+}
+
+.content {
+  padding: 25px;
+  background-color: #f8fafc;
+  min-height: calc(100vh - 60px);
+  box-sizing: border-box;
+}

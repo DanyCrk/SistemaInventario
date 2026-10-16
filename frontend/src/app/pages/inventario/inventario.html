@@ -1,0 +1,178 @@
+<div class="inventario">
+
+  <div class="page-header">
+    <div>
+      <h1>Inventario</h1>
+      <p>Historial de movimientos de stock (entradas, salidas y ajustes)</p>
+    </div>
+    <button class="btn-primary" (click)="abrirCrear()">
+      + Nuevo Movimiento
+    </button>
+  </div>
+
+  @if (mostrarFormulario) {
+
+    <div class="form-overlay">
+
+      <div class="form-box">
+
+        <h3>Nuevo Movimiento</h3>
+
+        @if (error) {
+          <p class="form-error">{{ error }}</p>
+        }
+
+        <label>Producto</label>
+        <div class="search-wrapper">
+
+          <input
+            type="text"
+            placeholder="Escribe el código o nombre del producto..."
+            [(ngModel)]="busquedaProducto"
+            name="busquedaProducto"
+            (input)="onBuscarProducto()"
+            (focus)="onBuscarProducto()"
+            class="search-input"
+            autocomplete="off">
+
+          @if (mostrarListaProductos && productosFiltrados.length > 0) {
+
+            <div class="search-results">
+              @for (producto of productosFiltrados; track producto.idProducto) {
+                <div class="search-result-item" (click)="seleccionarProducto(producto)">
+                  <span class="result-codigo">{{ producto.codigo }}</span>
+                  <span class="result-nombre">{{ producto.nombre }}</span>
+                  <span class="result-stock">Stock: {{ producto.stock }}</span>
+                </div>
+              }
+            </div>
+
+          }
+
+        </div>
+
+        <label>Tipo de movimiento</label>
+        <select [(ngModel)]="idTipoMovimientoSeleccionado" name="idTipoMovimiento" required>
+          <option [ngValue]="0">Selecciona un tipo</option>
+          @for (tipo of tiposMovimiento; track tipo.idTipoMovimiento) {
+            <option [ngValue]="tipo.idTipoMovimiento">{{ tipo.nombre }}</option>
+          }
+        </select>
+
+        <label>Cantidad</label>
+        <input
+          type="number"
+          [(ngModel)]="movimientoActual.cantidad"
+          name="cantidad"
+          required
+          class="no-spinner"
+          (wheel)="bloquearScroll($event)">
+
+        <label>ID Usuario</label>
+        <input
+          type="number"
+          [(ngModel)]="movimientoActual.usuario.idUsuario"
+          name="idUsuario"
+          required
+          class="no-spinner"
+          (wheel)="bloquearScroll($event)">
+
+        <label>Observación</label>
+        <input type="text" [(ngModel)]="movimientoActual.observacion" name="observacion">
+
+        <div class="form-buttons">
+          <button type="button" class="btn-action edit" (click)="guardarMovimiento()">Registrar</button>
+          <button type="button" class="btn-action delete" (click)="cancelarFormulario()">Cancelar</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+  <div class="filtro-box">
+
+  <div class="filtro-campo">
+    <label>Desde</label>
+    <input type="date" [(ngModel)]="fechaDesde" (ngModelChange)="resetearPagina()" name="fechaDesde">
+  </div>
+
+  <div class="filtro-campo">
+    <label>Hasta</label>
+    <input type="date" [(ngModel)]="fechaHasta" (ngModelChange)="resetearPagina()" name="fechaHasta">
+  </div>
+
+  <button type="button" class="btn-action delete" (click)="limpiarFiltroFecha()">
+    Limpiar filtro
+  </button>
+
+</div>
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Producto</th>
+          <th>Tipo</th>
+          <th>Cantidad</th>
+          <th>Usuario</th>
+          <th>Proveedor</th>
+          <th>Observación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @if (cargando) {
+          <tr><td colspan="9">Cargando movimientos...</td></tr>
+        }
+        @else if (error && !mostrarFormulario) {
+          <tr><td colspan="9">{{ error }}</td></tr>
+        }
+        @else if (movimientos.length === 0) {
+          <tr><td colspan="9">No hay movimientos registrados.</td></tr>
+        }
+        @else {
+
+          @for (movimiento of movimientosPaginados; track movimiento.idMovimiento) {
+
+            <tr>
+
+              <td>{{ movimiento.idMovimiento }}</td>
+              <td>{{ movimiento.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ movimiento.producto.nombre }}</td>
+              <td>{{ movimiento.tipoMovimiento.nombre }}</td>
+              <td>{{ movimiento.cantidad }}</td>
+              <td>{{ movimiento.usuario.nombre }}</td>
+              <td>{{ movimiento.proveedor?.nombre || '-' }}</td>
+              <td>{{ movimiento.observacion || '-' }}</td>
+
+              <td>
+                <button class="btn-action delete" (click)="eliminarMovimiento(movimiento)">Eliminar</button>
+              </td>
+
+            </tr>
+
+          }
+
+        }
+
+      </tbody>
+
+    </table>
+    @if (totalPaginas > 1) {
+    <div class="paginacion">
+     <button (click)="paginaAnterior()" [disabled]="paginaActual === 1">« Anterior</button>
+     <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+      <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">Siguiente »</button>
+    </div>
+    }
+
+  </div>
+
+</div>

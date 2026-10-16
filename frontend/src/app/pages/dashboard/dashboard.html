@@ -1,0 +1,146 @@
+<div class="dashboard">
+
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Resumen general del sistema de inventario</p>
+    </div>
+     <button class="copia" (click)="respaldarAhora()">
+  Copia de seguridad 
+  </button>
+  </div>
+ 
+
+  <div class="cards">
+
+    <div class="card card-clickable" (click)="irAProductos()">
+      <div class="card-title">
+        Productos
+      </div>
+
+      <div class="card-value">
+        {{ totalProductos }}
+      </div>
+
+      <div class="card-description">
+        Productos registrados
+      </div>
+    </div>
+
+    <div class="card card-clickable" (click)="abrirStockBajo()">
+      <div class="card-title">
+        Stock bajo
+      </div>
+
+      <div class="card-value">
+        {{ stockBajo }}
+      </div>
+
+      <div class="card-description">
+        Productos por reabastecer
+      </div>
+    </div>
+    <div class="card card-clickable" (click)="irAProductos()">
+      <div class="card-title">
+        Productos
+      </div>
+
+      <div class="card-value">
+        {{ totalProductos }}
+      </div>
+
+      <div class="card-description">
+        Productos registrados
+      </div>
+    </div>
+
+    <div class="card card-clickable" (click)="irACategorias()">
+      <div class="card-title">
+        Categorías
+      </div>
+
+      <div class="card-value">
+        {{ totalCategorias }}
+      </div>
+
+      <div class="card-description">
+        Categorías registradas
+      </div>
+    </div>
+
+    <div class="card card-clickable" (click)="irVentas()">
+      <div class="card-title">
+        Ventas
+      </div>
+
+      <div class="card-value">
+        {{ totalVentas }}
+      </div>
+
+      <div class="card-description">
+        Ventas realizadas
+      </div>
+    </div>
+
+    <div class="card card-clickable" (click)="irAClientes()">
+      <div class="card-title">
+        Clientes
+      </div>
+
+      <div class="card-value">
+        {{ totalClientes }}
+      </div>
+
+      <div class="card-description">
+        Clientes registrados
+      </div>
+    </div>
+
+  </div>
+
+  @if (mostrarModalStockBajo) {
+
+    <div class="form-overlay">
+
+      <div class="form-box">
+
+        <h3>Productos con stock bajo</h3>
+
+        @if (productosStockBajo.length === 0) {
+          <p>No hay productos con stock bajo actualmente.</p>
+        } @else {
+
+          <table class="stock-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Stock</th>
+                <th>Mínimo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (producto of productosStockBajo; track producto.idProducto) {
+                <tr>
+                  <td>{{ producto.codigo }}</td>
+                  <td>{{ producto.nombre }}</td>
+                  <td>{{ producto.stock }}</td>
+                  <td>{{ producto.stockMinimo }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+        }
+
+        <div class="form-buttons">
+          <button type="button" class="btn-action delete" (click)="cerrarStockBajo()">Cerrar</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

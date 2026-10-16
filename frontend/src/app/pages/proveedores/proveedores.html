@@ -1,0 +1,109 @@
+<div class="proveedores">
+
+  <div class="page-header">
+    <div>
+      <h1>Proveedores</h1>
+      <p>Gestiona los proveedores registrados en el sistema</p>
+    </div>
+    <button class="btn-primary" (click)="abrirCrear()">
+      + Nuevo Proveedor
+    </button>
+  </div>
+
+  @if (mostrarFormulario) {
+
+    <div class="form-overlay">
+
+      <div class="form-box">
+
+        <h3>{{ modoEdicion ? 'Editar Proveedor' : 'Nuevo Proveedor' }}</h3>
+
+        @if (error) {
+          <p class="form-error">{{ error }}</p>
+        }
+
+        <form (ngSubmit)="guardarProveedor()">
+
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="proveedorActual.nombre" name="nombre" required>
+
+          <label>NIT</label>
+          <input type="text" [(ngModel)]="proveedorActual.nit" name="nit">
+
+          <label>Teléfono</label>
+          <input type="text" [(ngModel)]="proveedorActual.telefono" name="telefono">
+
+          <label>Correo</label>
+          <input type="email" [(ngModel)]="proveedorActual.correo" name="correo">
+
+          <label>Dirección</label>
+          <input type="text" [(ngModel)]="proveedorActual.direccion" name="direccion">
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-action edit">Guardar</button>
+            <button type="button" class="btn-action delete" (click)="cancelarFormulario()">Cancelar</button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>NIT</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Dirección</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @if (cargando) {
+          <tr><td colspan="7">Cargando proveedores...</td></tr>
+        }
+        @else if (error && !mostrarFormulario) {
+          <tr><td colspan="7">{{ error }}</td></tr>
+        }
+        @else if (proveedores.length === 0) {
+          <tr><td colspan="7">No hay proveedores registrados.</td></tr>
+        }
+        @else {
+
+          @for (proveedor of proveedores; track proveedor.idProveedor) {
+
+            <tr>
+              <td>{{ proveedor.idProveedor }}</td>
+              <td>{{ proveedor.nombre }}</td>
+              <td>{{ proveedor.nit || '-' }}</td>
+              <td>{{ proveedor.telefono || '-' }}</td>
+              <td>{{ proveedor.correo || '-' }}</td>
+              <td>{{ proveedor.direccion || '-' }}</td>
+              <td>
+                <button class="btn-action edit" (click)="editarProveedor(proveedor)">Editar</button>
+                <button class="btn-action delete" (click)="eliminarProveedor(proveedor)">Eliminar</button>
+              </td>
+            </tr>
+
+          }
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

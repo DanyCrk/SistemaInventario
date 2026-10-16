@@ -1,0 +1,36 @@
+.form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.form-box {
+  background: white;
+  padding: 28px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.form-box h3 {
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.form-box label {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+}

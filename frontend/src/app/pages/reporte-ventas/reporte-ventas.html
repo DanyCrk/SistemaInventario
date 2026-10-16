@@ -1,0 +1,100 @@
+<div class="reporte-wrapper">
+
+  @if (cargando) {
+    <p class="no-print">Generando reporte...</p>
+  }
+  @else if (error) {
+    <p class="no-print">{{ error }}</p>
+  }
+  @else {
+
+    <div class="ticket">
+
+      <div class="ticket-header">
+        <h2>{{ empresa.nombre }}</h2>
+        <p>REPORTE DE VENTAS</p>
+      </div>
+
+      <div class="ticket-divider"></div>
+
+      <div class="ticket-info">
+        @if (esUnSoloDia) {
+          <p>Fecha: {{ desde }}</p>
+        } @else {
+          <p>Desde: {{ desde || 'inicio' }}</p>
+          <p>Hasta: {{ hasta || 'hoy' }}</p>
+        }
+        @if (metodoFiltro && resumenMetodos.length > 0) {
+          <p>Método: {{ resumenMetodos[0].nombre }}</p>
+        }
+        <p>Impreso: {{ fechaImpresion | date:'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+
+      <div class="ticket-divider"></div>
+
+      @if (ventas.length === 0) {
+        <p class="sin-ventas">No hay ventas en este periodo.</p>
+      } @else {
+
+        <table class="ticket-items">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Hora</th>
+              <th>Pago</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (venta of ventas; track venta.idVenta) {
+              <tr>
+                <td>{{ venta.idVenta }}</td>
+                <td>{{ venta.fecha | date:'HH:mm' }}</td>
+                <td>{{ venta.metodoPago.nombre }}</td>
+                <td>${{ venta.total | number:'1.0-0' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="ticket-divider"></div>
+
+        <p class="seccion-titulo">Por método de pago</p>
+
+        @for (resumen of resumenMetodos; track resumen.nombre) {
+          <div class="linea-total">
+            <span>{{ resumen.nombre }} ({{ resumen.cantidad }})</span>
+            <span>${{ resumen.total | number:'1.0-0' }}</span>
+          </div>
+        }
+
+        <div class="ticket-divider"></div>
+
+        <div class="linea-total">
+          <span>Ventas realizadas</span>
+          <span>{{ ventas.length }}</span>
+        </div>
+        <div class="linea-total">
+          <span>Subtotal</span>
+          <span>${{ totalSubtotal | number:'1.0-0' }}</span>
+        </div>
+        <div class="linea-total">
+          <span>Descuentos</span>
+          <span>${{ totalDescuento | number:'1.0-0' }}</span>
+        </div>
+        <div class="linea-total total-final">
+          <span>TOTAL</span>
+          <span>${{ totalGeneral | number:'1.0-0' }}</span>
+        </div>
+
+      }
+
+    </div>
+
+    <div class="no-print acciones-impresion">
+      <button (click)="imprimir()">Imprimir</button>
+    </div>
+
+  }
+
+</div>

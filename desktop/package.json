@@ -1,0 +1,43 @@
+{
+  "name": "sistema-inventario-desktop",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.tuempresa.sistemainventario",
+    "productName": "Sistema de Inventario",
+    "files": [
+      "main.js",
+      "frontend-dist/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/backend.jar",
+        "to": "backend.jar"
+      },
+      {
+        "from": "resources/inventario_vacio.db",
+        "to": "inventario_vacio.db"
+      },
+        {
+    "from": "resources/jre",
+    "to": "jre"
+     }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

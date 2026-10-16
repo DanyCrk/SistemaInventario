@@ -1,0 +1,44 @@
+<aside class="sidebar">
+
+  <div class="logo">
+    <h2>XUA SPORT</h2>
+  </div>
+
+  <nav class="menu">
+
+    <a routerLink="/dashboard">
+      Dashboard
+    </a>
+
+    <a routerLink="/productos">
+      Productos
+    </a>
+    <a routerLink="/categorias">
+      Categorías
+    </a>
+
+    <a routerLink="/ventas">
+      Ventas
+    </a>
+
+    <a routerLink="/inventario">
+       Movimientos de Inventario
+    </a>
+
+    <a routerLink="/clientes">
+      Clientes
+    </a>
+
+    <a routerLink="/proveedores">
+      Proveedores
+    </a>
+
+    @if (esAdministrador) {
+      <a routerLink="/usuarios">
+        Usuarios
+      </a>
+    }
+
+  </nav>
+
+</aside>

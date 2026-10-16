@@ -1,0 +1,147 @@
+<div class="categorias">
+
+  <div class="page-header">
+    <div>
+      <h1>Categorías</h1>
+      <p>Organiza tus productos por categoría</p>
+    </div>
+    <button class="btn-primary" (click)="abrirCrear()">
+      + Nueva Categoría
+    </button>
+  </div>
+
+  <!-- FORMULARIO CREAR/EDITAR -->
+  @if (mostrarFormulario) {
+
+    <div class="form-overlay">
+
+      <div class="form-box">
+
+        <h3>{{ modoEdicion ? 'Editar Categoría' : 'Nueva Categoría' }}</h3>
+
+        @if (error) {
+          <p class="form-error">{{ error }}</p>
+        }
+
+        <form (ngSubmit)="guardarCategoria()">
+
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="categoriaActual.nombre" name="nombre" required>
+
+          <label>Descripción</label>
+          <input type="text" [(ngModel)]="categoriaActual.descripcion" name="descripcion">
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-action edit">Guardar</button>
+            <button type="button" class="btn-action delete" (click)="cancelarFormulario()">Cancelar</button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
+
+  <!-- MODAL PRODUCTOS DE LA CATEGORÍA -->
+  @if (mostrarProductos) {
+
+    <div class="form-overlay">
+
+      <div class="form-box form-box-wide">
+
+        <h3>Productos en "{{ categoriaSeleccionada?.nombre }}"</h3>
+
+        @if (productosDeCategoria(categoriaSeleccionada?.idCategoria).length === 0) {
+          <p>Esta categoría no tiene productos registrados.</p>
+        } @else {
+
+          <table class="productos-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Precio venta</th>
+                <th>Stock</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (producto of productosDeCategoria(categoriaSeleccionada?.idCategoria); track producto.idProducto) {
+                <tr>
+                  <td>{{ producto.codigo }}</td>
+                  <td>{{ producto.nombre }}</td>
+                  <td>${{ producto.precioVenta }}</td>
+                  <td>{{ producto.stock }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+        }
+
+        <div class="form-buttons">
+          <button type="button" class="btn-action delete" (click)="cerrarProductos()">Cerrar</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Productos</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @if (cargando) {
+          <tr><td colspan="5">Cargando categorías...</td></tr>
+        }
+        @else if (error && !mostrarFormulario) {
+          <tr><td colspan="5">{{ error }}</td></tr>
+        }
+        @else if (categorias.length === 0) {
+          <tr><td colspan="5">No hay categorías registradas.</td></tr>
+        }
+        @else {
+
+          @for (categoria of categorias; track categoria.idCategoria) {
+
+            <tr>
+              <td>{{ categoria.idCategoria }}</td>
+              <td>{{ categoria.nombre }}</td>
+              <td>{{ categoria.descripcion || '-' }}</td>
+              <td>
+                <button class="cant" (click)="verProductos(categoria)">
+                  {{ cantidadProductos(categoria.idCategoria) }} Productos
+                </button>
+              </td>
+              <td>
+                <button class="btn-action edit" (click)="editarCategoria(categoria)">Editar</button>
+                <button class="btn-action delete" (click)="eliminarCategoria(categoria)">Eliminar</button>
+              </td>
+            </tr>
+
+          }
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

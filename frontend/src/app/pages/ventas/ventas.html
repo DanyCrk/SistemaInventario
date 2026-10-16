@@ -1,0 +1,386 @@
+<div class="ventas">
+
+  <div class="page-header">
+    <div>
+      <h1>Ventas</h1>
+      <p>Gestiona las ventas registradas en el sistema</p>
+    </div>
+    <div class="options">
+    <button class="btn-primary" (click)="abrirCrear()">
+      Nueva Venta
+    </button>
+    <div class="separador">
+
+    </div>
+    <button class="btn-primary" (click)="abrirGestionMetodos()">
+      Métodos de pago
+    </button>
+
+    </div>
+    
+
+    
+  </div>
+
+  <a class="link-gestionar" (click)="abrirGestionMetodos()">Añadir o quitar métodos de pago</a>
+
+  <!-- FORMULARIO CREAR / EDITAR -->
+  @if (mostrarFormulario) {
+
+    <div class="form-overlay">
+
+      <div class="form-box form-box-wide">
+
+        <h3>{{ modoEdicion ? 'Editar Venta' : 'Nueva Venta' }}</h3>
+
+        @if (error) {
+          <p class="form-error">{{ error }}</p>
+        }
+
+        <label>ID Usuario</label>
+        <input
+          type="number"
+          [(ngModel)]="ventaActual.usuario.idUsuario"
+          name="idUsuario"
+          required
+          class="no-spinner"
+          (wheel)="bloquearScroll($event)">
+
+        <label>ID Cliente (opcional)</label>
+        <input
+          type="number"
+          [(ngModel)]="idClienteInput"
+          name="idCliente"
+          class="no-spinner"
+          (wheel)="bloquearScroll($event)">
+
+        <label>Método de pago</label>
+        <select [(ngModel)]="ventaActual.metodoPago.idMetodoPago" name="idMetodoPago" required>
+          <option [ngValue]="0">Selecciona un método de pago</option>
+          @for (metodo of metodosPago; track metodo.idMetodoPago) {
+            <option [ngValue]="metodo.idMetodoPago">{{ metodo.nombre }}</option>
+          }
+        </select>
+        
+
+
+        @if (!modoEdicion) {
+
+          <!-- BUSCADOR DE PRODUCTOS EN VIVO -->
+          <div class="line-builder">
+
+            <h4>Agregar productos</h4>
+
+            <div class="line-builder-row">
+
+              <div class="search-wrapper">
+
+                <input
+                  type="text"
+                  placeholder="Escribe el código o nombre del producto..."
+                  [(ngModel)]="busquedaProducto"
+                  name="busquedaProducto"
+                  (input)="onBuscarProducto()"
+                  (focus)="onBuscarProducto()"
+                  class="search-input"
+                  autocomplete="off">
+
+                @if (mostrarListaProductos && productosFiltrados.length > 0) {
+
+                  <div class="search-results">
+                    @for (producto of productosFiltrados; track producto.idProducto) {
+                      <div class="search-result-item" (click)="seleccionarProducto(producto)">
+                        <span class="result-codigo">{{ producto.codigo }}</span>
+                        <span class="result-nombre">{{ producto.nombre }}</span>
+                        <span class="result-stock">Stock: {{ producto.stock }}</span>
+                      </div>
+                    }
+                  </div>
+
+                }
+
+              </div>
+
+              <input
+                type="number"
+                [(ngModel)]="cantidadSeleccionada"
+                name="cantidadSeleccionada"
+                min="1"
+                class="cantidad-input no-spinner"
+                (wheel)="bloquearScroll($event)">
+
+              <button type="button" class="btn-action edit" (click)="agregarLinea()">
+                Agregar
+              </button>
+
+            </div>
+
+            @if (lineas.length > 0) {
+
+              <table class="lineas-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio unit.</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (linea of lineas; track linea.producto.idProducto) {
+                    <tr>
+                      <td>{{ linea.producto.nombre }}</td>
+                      <td>{{ linea.cantidad }}</td>
+                      <td>${{ linea.precioUnitario | number:'1.0-0' }}</td>
+                      <td>${{ linea.subtotal | number:'1.0-0' }}</td>
+                      <td>
+                        <button type="button" class="btn-action delete" (click)="eliminarLinea($index)">
+                          Quitar
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+
+            }
+
+          </div>
+
+        }
+
+        <label>Descuento</label>
+        <input
+          type="number"
+          [(ngModel)]="ventaActual.descuento"
+          name="descuento"
+          class="no-spinner"
+          (wheel)="bloquearScroll($event)">
+
+        <label>Observación</label>
+        <input type="text" [(ngModel)]="ventaActual.observacion" name="observacion">
+
+        <div class="totales-box">
+          @if (!modoEdicion) {
+            <p>Subtotal: <strong>${{ subtotalCalculado | number:'1.0-0' }}</strong></p>
+            <p>Total: <strong>${{ totalCalculado | number:'1.0-0' }}</strong></p>
+          } @else {
+            <p>Subtotal: <strong>${{ ventaActual.subtotal | number:'1.0-0' }}</strong></p>
+            <p>Total: <strong>${{ totalEdicion | number:'1.0-0' }}</strong></p>
+}
+        </div>
+
+        <div class="form-buttons">
+          <button type="button" class="btn-action edit" (click)="guardarVenta()">Vender</button>
+          <button type="button" class="btn-action delete" (click)="cancelarFormulario()">Cancelar</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+  <!-- MODAL VER DETALLE -->
+  @if (mostrarDetalle) {
+
+    <div class="form-overlay">
+
+      <div class="form-box form-box-wide">
+
+        <h3>Detalle de la venta #{{ ventaSeleccionadaDetalle?.idVenta }}</h3>
+
+        @if (detallesVenta.length === 0) {
+          <p>Esta venta no tiene productos registrados.</p>
+        } @else {
+
+          <table class="lineas-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio unit.</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (detalle of detallesVenta; track detalle.idDetalle) {
+                <tr>
+                  <td>{{ detalle.producto.nombre }}</td>
+                  <td>{{ detalle.cantidad }}</td>
+                  <td>${{ detalle.precioUnitario | number:'1.0-0' }}</td>
+                  <td>${{ detalle.subtotal | number:'1.0-0' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+        }
+
+        <div class="form-buttons">
+          <button type="button" class="btn-action delete" (click)="cerrarDetalle()">Cerrar</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+  <!-- MODAL GESTIÓN DE MÉTODOS DE PAGO -->
+@if (mostrarGestionMetodos) {
+
+  <div class="form-overlay">
+
+    <div class="form-box">
+
+      <h3>Métodos de pago</h3>
+
+      <div class="agregar-metodo-row">
+        <input
+          type="text"
+          placeholder="Nombre del nuevo método..."
+          [(ngModel)]="nuevoMetodoPagoNombre"
+          name="nuevoMetodoPagoNombre"
+          (keyup.enter)="agregarMetodoPago()">
+        <button type="button" class="btn-action edit" (click)="agregarMetodoPago()">Agregar</button>
+      </div>
+
+      <table class="metodos-table">
+        <tbody>
+          @for (metodo of metodosPago; track metodo.idMetodoPago) {
+            <tr>
+              @if (metodoPagoEditando?.idMetodoPago === metodo.idMetodoPago) {
+                <td>
+                  <input type="text" [(ngModel)]="metodoPagoEditando!.nombre" name="editNombre{{metodo.idMetodoPago}}">
+                </td>
+                <td class="acciones-metodo">
+                  <button type="button" class="btn-action edit" (click)="guardarEdicionMetodoPago()">Guardar</button>
+                  <button type="button" class="btn-action delete" (click)="cancelarEdicionMetodoPago()">Cancelar</button>
+                </td>
+              } @else {
+                <td>{{ metodo.nombre }}</td>
+                <td class="acciones-metodo">
+                  <button type="button" class="btn-action edit" (click)="editarMetodoPago(metodo)">Editar</button>
+                  <button type="button" class="btn-action delete" (click)="eliminarMetodoPago(metodo)">Eliminar</button>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="form-buttons">
+        <button type="button" class="btn-action delete" (click)="cerrarGestionMetodos()">Cerrar</button>
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+  <!-- FILTRO POR FECHA -->
+ <!-- FILTRO POR FECHA -->
+<div class="filtro-box">
+
+  <div class="filtro-campo">
+    <label>Desde</label>
+    <input type="date" [(ngModel)]="fechaDesde" (ngModelChange)="resetearPagina()" name="fechaDesde">
+  </div>
+
+  <div class="filtro-campo">
+    <label>Hasta</label>
+    <input type="date" [(ngModel)]="fechaHasta" (ngModelChange)="resetearPagina()" name="fechaHasta">
+  </div>
+  <div class="filtro-campo">
+  <label>Método de pago</label>
+  <select [(ngModel)]="metodoPagoFiltro" (ngModelChange)="resetearPagina()" name="metodoPagoFiltro">
+    <option [ngValue]="0">Todos</option>
+    @for (metodo of metodosPago; track metodo.idMetodoPago) {
+      <option [ngValue]="metodo.idMetodoPago">{{ metodo.nombre }}</option>
+    }
+  </select>
+</div>
+
+
+  <button type="button" class="btn-action factura" (click)="imprimirReporte()">
+  Imprimir reporte
+  </button>
+  <button type="button" class="btn-action delete" (click)="limpiarFiltroFecha()">
+    Limpiar filtro
+  </button>
+
+</div>
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Usuario</th>
+          <th>Método de pago</th>
+          <th>Subtotal</th>
+          <th>Descuento</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @if (cargando) {
+          <tr><td colspan="9">Cargando ventas...</td></tr>
+        }
+        @else if (error && !mostrarFormulario && !mostrarDetalle) {
+          <tr><td colspan="9">{{ error }}</td></tr>
+        }
+        @else if (ventasFiltradas.length === 0) {
+          <tr><td colspan="9">No hay ventas para mostrar.</td></tr>
+        }
+        @else {
+
+          @for (venta of ventasPaginadas; track venta.idVenta) {
+
+            <tr>
+
+              <td>{{ venta.idVenta }}</td>
+              <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ venta.cliente?.nombre || 'Sin cliente' }}</td>
+              <td>{{ venta.usuario.nombre }}</td>
+              <td>{{ venta.metodoPago.nombre }}</td>
+              <td>${{ venta.subtotal | number:'1.0-0' }}</td>
+              <td>${{ venta.descuento | number:'1.0-0' }}</td>
+              <td>${{ venta.total | number:'1.0-0' }}</td>
+
+              <td>
+                <button class="btn-action view" (click)="verDetalle(venta)">Ver</button>
+                <button class="btn-action edit" (click)="editarVenta(venta)">Editar</button>
+                <button class="btn-action factura" (click)="imprimirFactura(venta)">Factura</button>
+                <button class="btn-action delete" (click)="eliminarVenta(venta)">Eliminar</button>
+              </td>
+
+            </tr>
+
+          }
+
+        }
+
+      </tbody>
+
+    </table>
+    @if (totalPaginas > 1) {
+    <div class="paginacion">
+      <button (click)="paginaAnterior()" [disabled]="paginaActual === 1">« Anterior</button>
+      <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+      <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">Siguiente »</button>
+    </div>
+    }
+
+  </div>
+
+</div>

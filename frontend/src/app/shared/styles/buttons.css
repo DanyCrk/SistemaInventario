@@ -1,0 +1,68 @@
+
+.active {
+  background-color: #00ff66;
+  color: #000000;
+}
+
+.copia {
+  background-color: #1e293b;
+  color: #ffffff;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+}
+h1{
+  color:#1e293b
+}
+p{color:#64748b}
+.warning {
+  background-color: #eab308;
+  color: #0a0a09;
+}
+
+.inactive {
+  background-color: #ef4444;
+  color: #000000;
+}
+
+.btn-action {
+  border: none;
+  padding: 7px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 12px;
+}
+
+.view {
+   border: 1px solid #0f0b0b;
+  width: 100px;
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+.edit {
+   border: 1px solid #0f0b0b;
+  width: 100px;
+  background-color: #1e293b;
+  color: #fffdfd;
+}
+
+.delete {
+  border: 1px solid #0f0b0b;
+  width: 100px;
+  background-color: #1e293b;
+  color: #f0f0f0;
+}
+
+.btn-action:hover {
+  opacity: 0.8;
+}
+.factura {
+   border: 1px solid #0f0b0b;
+  width: 100px;
+  background-color: #1e293b;
+  color: #fafafa;
+}

@@ -1,0 +1,10 @@
+@import '../../shared/styles/buttons.css';
+@import '../../shared/styles/overlay.css';
+@import '../../shared/styles/components.css';
+@import '../../shared/styles/formulario.css';
+.proveedores {
+  width: 100%;
+}
+.form-box input[type="number"] {
+  -moz-appearance: textfield;
+}

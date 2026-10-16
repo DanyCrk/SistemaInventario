@@ -1,0 +1,201 @@
+<div class="productos">
+
+  <div class="page-header">
+    <div>
+      <h1>Productos</h1>
+      <p>Gestiona el catálogo de productos del inventario</p>
+    </div>
+    <button class="btn-primary" (click)="abrirCrear()">
+      + Nuevo Producto
+    </button>
+  </div>
+
+  <!-- BUSCADOR DE LA TABLA -->
+  <div class="toolbar">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Buscar por código o nombre..."
+        [(ngModel)]="busquedaTabla"
+        (ngModelChange)="resetearPagina()"
+        name="busquedaTabla">
+    </div>
+  </div>
+
+  @if (mostrarFormulario) {
+
+    <div class="form-overlay">
+
+      <div class="form-box">
+
+        <h3>{{ modoEdicion ? 'Editar Producto' : 'Nuevo Producto' }}</h3>
+
+        @if (error) {
+          <p class="form-error">{{ error }}</p>
+        }
+
+        <form (ngSubmit)="guardarProducto()">
+
+          <label>Código</label>
+          <input type="text" [(ngModel)]="productoActual.codigo" name="codigo" required>
+
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="productoActual.nombre" name="nombre" required>
+
+          <label>Descripción</label>
+          <input type="text" [(ngModel)]="productoActual.descripcion" name="descripcion">
+
+          <label>Precio compra</label>
+          <input
+            type="number"
+            [(ngModel)]="productoActual.precioCompra"
+            name="precioCompra"
+            required
+            class="no-spinner"
+            (wheel)="bloquearScroll($event)">
+
+          <label>Precio venta</label>
+          <input
+            type="number"
+            [(ngModel)]="productoActual.precioVenta"
+            name="precioVenta"
+            required
+            class="no-spinner"
+            (wheel)="bloquearScroll($event)">
+
+          <label>Stock</label>
+          <input
+            type="number"
+            [(ngModel)]="productoActual.stock"
+            name="stock"
+            required
+            class="no-spinner"
+            (wheel)="bloquearScroll($event)">
+
+          <label>Stock mínimo</label>
+          <input
+            type="number"
+            [(ngModel)]="productoActual.stockMinimo"
+            name="stockMinimo"
+            required
+            class="no-spinner"
+            (wheel)="bloquearScroll($event)">
+
+          <label>Categoría</label>
+          <div class="search-wrapper">
+
+            <input
+              type="text"
+              placeholder="Escribe para buscar una categoría..."
+              [(ngModel)]="busquedaCategoria"
+              name="busquedaCategoria"
+              (input)="onBuscarCategoria()"
+              (focus)="onBuscarCategoria()"
+              class="search-input"
+              autocomplete="off">
+
+            @if (mostrarListaCategorias && categoriasFiltradas.length > 0) {
+
+              <div class="search-results">
+                @for (categoria of categoriasFiltradas; track categoria.idCategoria) {
+                  <div class="search-result-item" (click)="seleccionarCategoria(categoria)">
+                    {{ categoria.nombre }}
+                  </div>
+                }
+              </div>
+
+            }
+
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-action edit">Guardar</button>
+            <button type="button" class="btn-action delete" (click)="cancelarFormulario()">Cancelar</button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Código</th>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Precio venta</th>
+          <th>Stock</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @if (cargando) {
+          <tr><td colspan="8">Cargando productos...</td></tr>
+        }
+        @else if (error && !mostrarFormulario) {
+          <tr><td colspan="8">{{ error }}</td></tr>
+        }
+        @else if (productosFiltradosTabla.length === 0) {
+          <tr><td colspan="8">No hay productos para mostrar.</td></tr>
+        }
+        @else {
+
+          @for (producto of productosPaginados; track producto.idProducto) {
+
+            <tr>
+
+              <td>{{ producto.idProducto }}</td>
+              <td>{{ producto.codigo }}</td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.categoria.nombre }}</td>
+              <td>${{ producto.precioVenta | number:'1.0-0' }}</td>
+              <td>{{ producto.stock }}</td>
+
+              <td>
+                @if (producto.stock === 0) {
+                  <span class="status inactive">Agotado</span>
+                }
+                @else if (producto.stock <= producto.stockMinimo) {
+                  <span class="status warning">Stock bajo</span>
+                }
+                @else {
+                  <span class="status active">Disponible</span>
+                }
+              </td>
+
+              <td>
+                <button class="btn-action edit" (click)="editarProducto(producto)">Editar</button>
+                <button class="btn-action delete" (click)="eliminarProducto(producto)">Eliminar</button>
+              </td>
+
+            </tr>
+
+          }
+
+        }
+
+      </tbody>
+
+    </table>
+    @if (totalPaginas > 1) {
+    <div class="paginacion">
+      <button (click)="paginaAnterior()" [disabled]="paginaActual === 1">« Anterior</button>
+      <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+      <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">Siguiente »</button>
+    </div>
+    }
+
+  </div>
+
+</div>

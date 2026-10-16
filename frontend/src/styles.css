@@ -1,0 +1,27 @@
+
+.form-box input[type="number"]::-webkit-outer-spin-button,
+.form-box input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+body {
+  font-family: 'arial', sans-serif;
+  margin: 0; 
+}
+.color {
+  /* Colores de Marca y Estructura */
+  --bg-principal: #f8fafc;       /* Fondo limpio para tablas y páneles */
+  --bg-tarjetas: #ffffff;        /* Fondo blanco para elementos flotantes */
+  --texto-principal: #1e293b;    /* Texto oscuro de alta legibilidad */
+  --texto-secundario: #64748b;   /* Gris para etiquetas o códigos SKU */
+  
+  /* Color de Identidad (Energía Deportiva) */
+  --color-acento: #00ff66;       /* Verde vibrante para botones de éxito, agregar item, etc. */
+  --color-brand: #0f172a;        /* Azul muy oscuro para la barra de navegación lateral */
+
+  /* Colores de Estado del Inventario (Críticos en Gestión) */
+  --status-ok: #22c55e;          /* Stock disponible / Todo al día */
+  --status-alerta: #eab308;      /* Stock bajo / Requiere atención */
+  --status-critico: #ef4444;     /* Sin stock / Producto agotado */
+}

@@ -1,0 +1,115 @@
+<div class="usuarios">
+
+  <div class="page-header">
+    <div>
+      <h1>Usuarios</h1>
+      <p>Gestiona los usuarios del sistema</p>
+    </div>
+    <button class="btn-primary" (click)="abrirCrear()">
+      + Nuevo Usuario
+    </button>
+  </div>
+
+  @if (mostrarFormulario) {
+
+    <div class="form-overlay">
+
+      <div class="form-box">
+
+        <h3>{{ modoEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+
+        @if (error) {
+          <p class="form-error">{{ error }}</p>
+        }
+
+        <form (ngSubmit)="guardarUsuario()">
+
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="usuarioActual.nombre" name="nombre" required>
+
+          <label>Correo</label>
+          <input type="email" [(ngModel)]="usuarioActual.correo" name="correo" required>
+
+          <label>{{ modoEdicion ? 'Nueva contraseña (dejar vacío para no cambiar)' : 'Contraseña' }}</label>
+          <input type="password" [(ngModel)]="usuarioActual.password" name="password" [required]="!modoEdicion">
+
+          <label>Rol</label>
+          <select [(ngModel)]="usuarioActual.rol.idRol" name="idRol" required>
+            <option [ngValue]="0">Selecciona un rol</option>
+            @for (rol of roles; track rol.idRol) {
+              <option [ngValue]="rol.idRol">{{ rol.nombre }}</option>
+            }
+          </select>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-action edit">Guardar</button>
+            <button type="button" class="btn-action delete" (click)="cancelarFormulario()">Cancelar</button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @if (cargando) {
+          <tr><td colspan="6">Cargando usuarios...</td></tr>
+        }
+        @else if (error && !mostrarFormulario) {
+          <tr><td colspan="6">{{ error }}</td></tr>
+        }
+        @else if (usuarios.length === 0) {
+          <tr><td colspan="6">No hay usuarios registrados.</td></tr>
+        }
+        @else {
+
+          @for (usuario of usuarios; track usuario.idUsuario) {
+
+            <tr>
+              <td>{{ usuario.idUsuario }}</td>
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.correo }}</td>
+              <td>{{ usuario.rol.nombre|| '-' }}</td>
+              <td>
+                @if (usuario.activo) {
+                  <span class="status active">Activo</span>
+                } @else {
+                  <span class="status inactive">Inactivo</span>
+                }
+              </td>
+              <td>
+                <button class="btn-action edit" (click)="editarUsuario(usuario)">Editar</button>
+                <button class="btn-action delete" (click)="eliminarUsuario(usuario)">Eliminar</button>
+              </td>
+            </tr>
+
+          }
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

@@ -1,0 +1,38 @@
+
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background-color:#0f172a;
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.logo {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #334155;
+}
+
+.logo h2 {
+  margin: 0;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 0;
+}
+
+.menu a {
+  padding: 14px 20px;
+  color: #f8fafc;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.menu a:hover {
+  background-color: #334155;
+  color: white;
+}

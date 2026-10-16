@@ -1,0 +1,77 @@
+@import '../../shared/styles/filtros.css';
+@import '../../shared/styles/buttons.css';
+@import '../../shared/styles/formulario.css';
+@import '../../shared/styles/overlay.css';
+@import '../../shared/styles/components.css';
+.inventario {
+  width: 100%;
+}
+
+
+.search-wrapper {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  margin-top: 5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 50;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background-color: #f1f5f9;
+}
+
+.result-codigo {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.result-nombre {
+  flex: 1;
+}
+
+.result-stock {
+  color: #64748b;
+  font-size: 12px;
+}
+
+
+.form-box input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+

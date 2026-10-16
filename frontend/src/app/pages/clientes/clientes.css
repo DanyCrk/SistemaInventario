@@ -1,0 +1,62 @@
+@import '../../shared/styles/filtros.css';
+@import '../../shared/styles/components.css';
+@import '../../shared/styles/overlay.css';
+@import '../../shared/styles/buttons.css';
+@import '../../shared/styles/formulario.css';
+.clientes {
+  width: 100%; 
+}
+
+.form-box input[type="number"] {
+  -moz-appearance: textfield;
+}
+.filtro-numero {
+  width: 80px;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.form-box-wide {
+  width: 480px;
+}
+.rango-info {
+  font-size: 13px;
+  color: #64748b;
+  margin: -8px 0 12px 0;
+}
+.compras-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.compras-table th {
+  text-align: left;
+  padding: 8px;
+  font-size: 12px;
+  color: #475569;
+  background-color: #f8fafc;
+}
+.compras-table td {
+  padding: 8px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13px;
+}
+.totales-box {
+  margin-top: 14px;
+  padding: 12px;
+  background-color: #f8fafc;
+  border-radius: 7px;
+}
+.totales-box p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-spinner {
+  -moz-appearance: textfield;
+}

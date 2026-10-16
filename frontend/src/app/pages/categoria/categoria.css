@@ -1,0 +1,43 @@
+@import '../../shared/styles/buttons.css';
+@import '../../shared/styles/components.css';
+@import '../../shared/styles/formulario.css';
+@import '../../shared/styles/overlay.css';
+.categorias {
+  width: 100%;
+}
+.p{
+  background-color: #64748b;
+}
+.form-box-wide {
+  width: 520px;
+}
+.cant{
+ border: 1px solid #0f0b0b;
+  width: 100px;
+  background-color: #1e293b;
+  color: #f0f0f0;
+
+}
+.btn-action-cant:hover{
+  opacity: 0.8;
+}
+
+.productos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.productos-table th {
+  text-align: left;
+  padding: 8px;
+  font-size: 12px;
+  color: #475569;
+  background-color: #f8fafc;
+}
+
+.productos-table td {
+  padding: 8px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13px;
+}

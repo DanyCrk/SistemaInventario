@@ -1,0 +1,50 @@
+# ===== Dependencias =====
+node_modules/
+
+# ===== Frontend (Angular) =====
+frontend/dist/
+frontend/.angular/
+frontend/out-tsc/
+
+# ===== Backend (Spring Boot / Maven) =====
+backend/target/
+*.class
+*.log
+
+# ===== Desktop (Electron) =====
+# Carpeta de salida del instalador
+desktop/dist/
+# Copia del build de Angular (se regenera con ng build)
+desktop/frontend-dist/
+# Archivos generados o pesados que se regeneran siguiendo el README
+desktop/resources/backend.jar
+desktop/resources/jre/
+desktop/resources/inventario_vacio.db
+
+# ===== Bases de datos y respaldos =====
+# Contienen datos reales (clientes, ventas, contraseñas encriptadas): nunca subirlos
+*.db
+*.sqlite
+*.sqlite3
+database/backups/
+
+# ===== Configuración local y secretos =====
+.env
+.env.*
+application-local.properties
+
+# ===== IDEs =====
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+.sts4-cache/
+nbproject/
+
+# ===== Sistema operativo =====
+.DS_Store
+Thumbs.db
+desktop.ini

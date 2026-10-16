@@ -1,0 +1,11 @@
+@import '../../shared/styles/buttons.css';
+@import '../../shared/styles/components.css';
+@import '../../shared/styles/formulario.css';
+.usuarios {
+  width: 100%;
+}
+
+
+.form-box input[type="number"] {
+  -moz-appearance: textfield;
+}

@@ -1,0 +1,84 @@
+<div class="factura-wrapper">
+
+  @if (cargando) {
+    <p class="no-print">Cargando factura...</p>
+  }
+  @else if (error) {
+    <p class="no-print">{{ error }}</p>
+  }
+  @else if (venta) {
+
+    <div class="ticket">
+
+      <div class="ticket-header">
+        <h2>{{ empresa.nombre }}</h2>
+        <p>{{ empresa.direccion }}</p>
+        <p>Tel: {{ empresa.telefono }}</p>
+        <p>{{ empresa.horario }}</p>
+      </div>
+
+      <div class="ticket-divider"></div>
+
+      <div class="ticket-info">
+        <p>Fecha: {{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</p>
+        <p>Cliente: {{ venta.cliente?.nombre || 'Consumidor final' }}</p>
+        <p>Atendido por: {{ venta.usuario.nombre }}</p>
+      </div>
+
+      <div class="ticket-divider"></div>
+
+      <table class="ticket-items">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cant</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (detalle of detalles; track detalle.idDetalle) {
+            <tr>
+              <td>{{ detalle.producto.nombre }}</td>
+              <td>{{ detalle.cantidad }}</td>
+              <td>${{ detalle.subtotal | number:'1.0-0' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="ticket-divider"></div>
+
+      <div class="ticket-totales">
+        <div class="linea-total">
+          <span>Subtotal</span>
+          <span>${{ venta.subtotal | number:'1.0-0' }}</span>
+        </div>
+        <div class="linea-total">
+          <span>Descuento</span>
+          <span>${{ venta.descuento | number:'1.0-0' }}</span>
+        </div>
+        <div class="linea-total total-final">
+          <span>TOTAL</span>
+          <span>${{ venta.total | number:'1.0-0' }}</span>
+        </div>
+        <div class="linea-total">
+          <span>Método de pago</span>
+          <span>{{ venta.metodoPago.nombre }}</span>
+        </div>
+      </div>
+
+      <div class="ticket-divider"></div>
+
+      <div class="ticket-footer">
+        <p>¡Gracias por su compra!</p>
+      </div>
+
+    </div>
+
+    <div class="no-print acciones-impresion">
+      <button (click)="imprimir()">Imprimir</button>
+    </div>
+
+  }
+
+</div>
